@@ -1,1 +1,752 @@
-Hello World
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pray Info Form</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+  <style>
+    :root {
+      --bg1: #101925;
+      --bg2: #18283b;
+      --glass: rgba(255,255,255,0.08);
+      --glass-strong: rgba(255,255,255,0.12);
+      --line: rgba(255,255,255,0.16);
+      --text: #f5f7fb;
+      --muted: #bfd0e4;
+      --accent: #7eb7ff;
+      --accent-soft: rgba(126,183,255,0.16);
+      --success: #a9ffd2;
+      --danger: #ffd1d8;
+      --paper: rgba(255,255,255,0.96);
+      --paper-line: rgba(17, 26, 39, 0.22);
+      --paper-text: #121a24;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Kantumruy Pro', sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(106,168,255,0.16), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(61,104,163,0.18), transparent 28%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+    }
+
+    .page {
+      width: min(1320px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 26px 0 40px;
+    }
+
+    .hero {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      margin: 0 0 6px;
+      font-size: clamp(24px, 3vw, 34px);
+      line-height: 1.35;
+      font-weight: 700;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+      max-width: 760px;
+    }
+
+    .hero-badge {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      color: #dcecff;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 18px 44px rgba(0,0,0,0.2);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      background: var(--glass);
+      backdrop-filter: blur(16px);
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.26);
+    }
+
+    .form-shell {
+      padding: 18px;
+    }
+
+    .paper {
+      background: var(--paper);
+      color: var(--paper-text);
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.22);
+      box-shadow: 0 18px 34px rgba(0,0,0,0.12);
+    }
+
+    .paper-head {
+      padding: 22px 26px 8px;
+      text-align: center;
+    }
+
+    .paper-head h2 {
+      margin: 0;
+      font-size: clamp(22px, 2.2vw, 32px);
+      line-height: 1.4;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      padding: 12px 22px 18px;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .meta-item label {
+      flex: 0 0 auto;
+      font-weight: 600;
+      font-size: 15px;
+      white-space: nowrap;
+    }
+
+    .meta-item input {
+      width: 100%;
+      border: none;
+      border-bottom: 1.5px solid rgba(18,26,36,0.35);
+      background: transparent;
+      height: 38px;
+      padding: 0 2px;
+      font: inherit;
+      color: var(--paper-text);
+      outline: none;
+    }
+
+    table.pray-table {
+      width: calc(100% - 28px);
+      margin: 0 14px 14px;
+      border-collapse: collapse;
+      table-layout: fixed;
+      background: #fff;
+    }
+
+    .pray-table th,
+    .pray-table td {
+      border: 1px solid var(--paper-line);
+      vertical-align: top;
+      padding: 0;
+    }
+
+    .pray-table thead th {
+      font-size: 16px;
+      font-weight: 700;
+      text-align: left;
+      padding: 10px 12px;
+      background: rgba(17,26,39,0.03);
+    }
+
+    .side-title {
+      width: 58px;
+      text-align: center;
+      background: rgba(17,26,39,0.03);
+      position: relative;
+    }
+
+    .side-title > span {
+      display: inline-block;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 18px 0;
+      min-height: 600px;
+    }
+
+    .col-label {
+      width: 110px;
+      background: rgba(17,26,39,0.03);
+    }
+
+    .col-label input,
+    .bottom-label,
+    .bottom-input {
+      font: inherit;
+    }
+
+    .row-label-input,
+    .row-detail-input,
+    .bottom-input {
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--paper-text);
+      font-family: inherit;
+      font-size: 15px;
+      padding: 12px;
+      resize: none;
+    }
+
+    .row-label-input {
+      font-weight: 600;
+    }
+
+    .row-detail-input {
+      min-height: 64px;
+      line-height: 1.65;
+    }
+
+    .bottom-label {
+      width: 180px;
+      background: rgba(17,26,39,0.03);
+      font-weight: 700;
+      padding: 12px;
+      vertical-align: middle !important;
+    }
+
+    .bottom-input {
+      min-height: 64px;
+      line-height: 1.65;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      padding: 4px 4px 0;
+      margin-top: 18px;
+    }
+
+    .actions-left,
+    .actions-right {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      border-radius: 16px;
+      padding: 13px 18px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.22s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn:hover { background: rgba(126,183,255,0.18); }
+    .btn.primary {
+      background: rgba(126,183,255,0.22);
+      border-color: rgba(126,183,255,0.34);
+      color: #e8f4ff;
+    }
+
+    .status {
+      min-height: 20px;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+      padding: 0 4px;
+    }
+
+    .status.success { color: var(--success); }
+    .status.error { color: var(--danger); }
+
+    .side-panel {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: sticky;
+      top: 18px;
+    }
+
+    .side-head h3 {
+      margin: 0 0 4px;
+      font-size: 20px;
+      line-height: 1.4;
+    }
+
+    .side-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .stat-box {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .stat-box strong {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .stat-box span {
+      font-size: 21px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .mini-note {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+      border-radius: 16px;
+      padding: 14px;
+      font-size: 13px;
+      line-height: 1.75;
+      color: #d7e6f7;
+    }
+
+    .recent-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 560px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .recent-item {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.06);
+      border-radius: 18px;
+      padding: 12px;
+    }
+
+    .recent-item h4 {
+      margin: 0 0 6px;
+      font-size: 15px;
+      line-height: 1.55;
+      color: #fff;
+    }
+
+    .recent-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      color: #c9dbef;
+      font-size: 12px;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+
+    .recent-line {
+      color: #e4eefb;
+      font-size: 13px;
+      line-height: 1.65;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .empty {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      padding: 18px 12px;
+      border: 1px dashed rgba(255,255,255,0.16);
+      border-radius: 16px;
+    }
+
+    @media (max-width: 1080px) {
+      .layout { grid-template-columns: 1fr; }
+      .side-panel { position: static; }
+    }
+
+    @media (max-width: 760px) {
+      .page { width: min(100%, calc(100% - 16px)); padding-top: 12px; }
+      .hero { flex-direction: column; }
+      .meta-grid { grid-template-columns: 1fr; }
+      .paper-head { padding-inline: 16px; }
+      .meta-grid { padding-inline: 16px; }
+      table.pray-table { width: calc(100% - 16px); margin-inline: 8px; }
+      .col-label { width: 88px; }
+      .bottom-label { width: 120px; }
+      .side-title > span { min-height: 480px; font-size: 16px; }
+      .pray-table thead th { font-size: 14px; }
+      .row-label-input, .row-detail-input, .bottom-input { font-size: 14px; padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="hero">
+      <div>
+        <h1><i class="ri-file-list-3-line"></i> Pray Info Form</h1>
+        <p>
+          ទម្រង់បញ្ចូលព័ត៌មានបែបថ្មី ជាមួយរចនាប័ទ្ម glassy ដូច audio platform។ បញ្ចូលព័ត៌មាន ហើយរក្សាទុកទៅ Firebase បានភ្លាមៗ។
+        </p>
+      </div>
+      <div class="hero-badge"><i class="ri-database-2-line"></i> Firebase Ready</div>
+    </div>
+
+    <div class="layout">
+      <div class="panel form-shell">
+        <form id="prayForm" novalidate>
+          <div class="paper">
+            <div class="paper-head">
+              <h2>ព័ត៌មានអធិស្ឋាន</h2>
+            </div>
+
+            <div class="meta-grid">
+              <div class="meta-item">
+                <label for="formDate">កាលបរិច្ឆេទ :</label>
+                <input id="formDate" name="formDate" type="date" required />
+              </div>
+              <div class="meta-item">
+                <label for="personName">ឈ្មោះអ្នកស្នើ :</label>
+                <input id="personName" name="personName" type="text" placeholder="បញ្ចូលឈ្មោះ" required />
+              </div>
+              <div class="meta-item">
+                <label for="serviceArea">ការបម្រើទូទៅ :</label>
+                <input id="serviceArea" name="serviceArea" type="text" placeholder="ឧ. ក្រុមជំនុំ / ផ្នែក" />
+              </div>
+            </div>
+
+            <table class="pray-table">
+              <thead>
+                <tr>
+                  <th colspan="2">ផ្នែកសំណើ</th>
+                  <th>លម្អិត</th>
+                </tr>
+              </thead>
+              <tbody id="prayRows"></tbody>
+              <tbody>
+                <tr>
+                  <td class="bottom-label" colspan="2">ប្រភពព័ត៌មាន</td>
+                  <td><textarea id="sourceInfo" class="bottom-input" placeholder="បញ្ចូលប្រភពព័ត៌មាន..."></textarea></td>
+                </tr>
+                <tr>
+                  <td class="bottom-label" colspan="2">ចម្លើយ</td>
+                  <td><textarea id="answerInfo" class="bottom-input" placeholder="បញ្ចូលចម្លើយ ឬ កំណត់សម្គាល់..."></textarea></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="actions">
+            <div class="actions-left">
+              <button class="btn" type="button" id="fillDemoBtn"><i class="ri-magic-line"></i> Demo Data</button>
+              <button class="btn" type="button" id="clearBtn"><i class="ri-eraser-line"></i> Clear Form</button>
+            </div>
+            <div class="actions-right">
+              <button class="btn primary" type="submit" id="saveBtn"><i class="ri-save-3-line"></i> Save To Firebase</button>
+            </div>
+          </div>
+
+          <div id="status" class="status"></div>
+        </form>
+      </div>
+
+      <aside class="panel side-panel">
+        <div class="side-head">
+          <h3>Recent Entries</h3>
+          <p>បញ្ជីនេះអានពី Firebase ដោយផ្ទាល់ ដើម្បីមើលទិន្នន័យដែលបានរក្សាទុកថ្មីៗ។</p>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat-box">
+            <strong>Total Records</strong>
+            <span id="totalCount">0</span>
+          </div>
+          <div class="stat-box">
+            <strong>Loaded Now</strong>
+            <span id="loadedCount">0</span>
+          </div>
+        </div>
+
+        <div class="mini-note">
+          Path used in Firebase: <strong>prayinfoEntries</strong><br>
+          If your database rules need login, this page will need auth added next.
+        </div>
+
+        <div id="recentList" class="recent-list">
+          <div class="empty">កំពុងផ្ទុកទិន្នន័យ...</div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { getDatabase, ref, push, set, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCZgQBrY5cwGpCra0gBqs1ZDkJPugewHhc",
+      authDomain: "thythet-podcast.firebaseapp.com",
+      databaseURL: "https://thythet-podcast-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "thythet-podcast",
+      storageBucket: "thythet-podcast.firebasestorage.app",
+      messagingSenderId: "164940506015",
+      appId: "1:164940506015:web:3860e938d888f424b693aa",
+      measurementId: "G-GZRDKL1N0R"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const ENTRY_PATH = 'prayinfoEntries';
+
+    const prayForm = document.getElementById('prayForm');
+    const prayRows = document.getElementById('prayRows');
+    const statusEl = document.getElementById('status');
+    const clearBtn = document.getElementById('clearBtn');
+    const fillDemoBtn = document.getElementById('fillDemoBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    const recentList = document.getElementById('recentList');
+    const totalCount = document.getElementById('totalCount');
+    const loadedCount = document.getElementById('loadedCount');
+
+    const DEFAULT_ROWS = [
+      'សុខភាព',
+      'គ្រួសារ',
+      'ការងារ',
+      'ហិរញ្ញវត្ថុ',
+      'ការសិក្សា',
+      'សេវាកម្ម',
+      'ការធ្វើដំណើរ',
+      'ជំនឿ',
+      'មិត្តភក្តិ',
+      'ផ្សេងៗ'
+    ];
+
+    function buildRows() {
+      prayRows.innerHTML = '';
+      DEFAULT_ROWS.forEach((label, index) => {
+        const tr = document.createElement('tr');
+
+        if (index === 0) {
+          const sideTd = document.createElement('td');
+          sideTd.className = 'side-title';
+          sideTd.rowSpan = DEFAULT_ROWS.length;
+          sideTd.innerHTML = '<span>ព័ត៌មានសំណូមពរ</span>';
+          tr.appendChild(sideTd);
+        }
+
+        const labelTd = document.createElement('td');
+        labelTd.className = 'col-label';
+        labelTd.innerHTML = `<input class="row-label-input" type="text" name="rowLabel${index}" value="${label}" />`;
+
+        const detailTd = document.createElement('td');
+        detailTd.innerHTML = `<textarea class="row-detail-input" name="rowDetail${index}" placeholder="សូមបញ្ចូលលម្អិត..."></textarea>`;
+
+        tr.appendChild(labelTd);
+        tr.appendChild(detailTd);
+        prayRows.appendChild(tr);
+      });
+    }
+
+    function setStatus(message, type = '') {
+      statusEl.textContent = message;
+      statusEl.className = 'status' + (type ? ` ${type}` : '');
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '---';
+      return dateStr;
+    }
+
+    function collectRows() {
+      const rows = [];
+      for (let i = 0; i < DEFAULT_ROWS.length; i += 1) {
+        const label = prayForm[`rowLabel${i}`]?.value?.trim() || '';
+        const detail = prayForm[`rowDetail${i}`]?.value?.trim() || '';
+        rows.push({ label, detail });
+      }
+      return rows;
+    }
+
+    function getFirstMeaningfulLine(rows) {
+      const hit = rows.find(row => row.detail);
+      return hit ? `${hit.label || 'ផ្នែក'}: ${hit.detail}` : 'មិនទាន់មានលម្អិត';
+    }
+
+    function renderRecent(items) {
+      totalCount.textContent = String(items.length);
+      loadedCount.textContent = String(Math.min(items.length, 8));
+
+      if (!items.length) {
+        recentList.innerHTML = '<div class="empty">មិនទាន់មានទិន្នន័យនៅក្នុង Firebase ទេ។</div>';
+        return;
+      }
+
+      recentList.innerHTML = items.slice(0, 8).map(item => {
+        const top = getFirstMeaningfulLine(item.prayerRows || []);
+        return `
+          <div class="recent-item">
+            <h4>${escapeHtml(item.personName || 'មិនមានឈ្មោះ')}</h4>
+            <div class="recent-meta">
+              <span><i class="ri-calendar-line"></i> ${escapeHtml(formatDate(item.formDate))}</span>
+              <span><i class="ri-folder-2-line"></i> ${escapeHtml(item.serviceArea || '---')}</span>
+            </div>
+            <div class="recent-line">${escapeHtml(top)}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function resetForm() {
+      prayForm.reset();
+      document.getElementById('formDate').value = new Date().toISOString().slice(0, 10);
+      buildRows();
+      setStatus('Form cleared.');
+    }
+
+    function fillDemoData() {
+      document.getElementById('formDate').value = new Date().toISOString().slice(0, 10);
+      document.getElementById('personName').value = 'ឈ្មោះសាកល្បង';
+      document.getElementById('serviceArea').value = 'ក្រុមជំនុំ A';
+
+      const demoTexts = [
+        'សូមអធិស្ឋានសម្រាប់ការសះស្បើយ។',
+        'សូមអធិស្ឋានឱ្យគ្រួសារមានសុខសាន្ត។',
+        'សូមអធិស្ឋានសម្រាប់ការងារថ្មី។'
+      ];
+
+      demoTexts.forEach((text, i) => {
+        const input = prayForm[`rowDetail${i}`];
+        if (input) input.value = text;
+      });
+
+      document.getElementById('sourceInfo').value = 'បានទទួលព័ត៌មានពីអ្នកដឹកនាំក្រុម។';
+      document.getElementById('answerInfo').value = 'កំពុងតាមដាន និងអធិស្ឋានបន្ត។';
+      setStatus('Demo data inserted.');
+    }
+
+    prayForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const formDate = document.getElementById('formDate').value;
+      const personName = document.getElementById('personName').value.trim();
+      const serviceArea = document.getElementById('serviceArea').value.trim();
+      const sourceInfo = document.getElementById('sourceInfo').value.trim();
+      const answerInfo = document.getElementById('answerInfo').value.trim();
+      const prayerRows = collectRows();
+
+      if (!formDate || !personName) {
+        setStatus('Please fill date and name first.', 'error');
+        return;
+      }
+
+      const hasSomeDetail = prayerRows.some(row => row.detail);
+      if (!hasSomeDetail && !sourceInfo && !answerInfo) {
+        setStatus('Please enter at least one prayer detail.', 'error');
+        return;
+      }
+
+      saveBtn.disabled = true;
+      setStatus('Saving to Firebase...');
+
+      const payload = {
+        formDate,
+        personName,
+        serviceArea,
+        sourceInfo,
+        answerInfo,
+        prayerRows,
+        createdAt: Date.now(),
+        serverCreatedAt: serverTimestamp()
+      };
+
+      try {
+        const newRef = push(ref(db, ENTRY_PATH));
+        await set(newRef, payload);
+        setStatus('Saved successfully to Firebase.', 'success');
+        resetForm();
+      } catch (error) {
+        console.error(error);
+        setStatus(`Save failed: ${error.message}`, 'error');
+      } finally {
+        saveBtn.disabled = false;
+      }
+    });
+
+    clearBtn.addEventListener('click', resetForm);
+    fillDemoBtn.addEventListener('click', fillDemoData);
+
+    onValue(ref(db, ENTRY_PATH), (snapshot) => {
+      const raw = snapshot.val() || {};
+      const items = Object.entries(raw)
+        .map(([id, value]) => ({ id, ...value }))
+        .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+      renderRecent(items);
+    }, (error) => {
+      console.error(error);
+      recentList.innerHTML = `<div class="empty">Read failed: ${escapeHtml(error.message)}</div>`;
+    });
+
+    buildRows();
+    document.getElementById('formDate').value = new Date().toISOString().slice(0, 10);
+    setStatus('Ready. You can save data to Firebase now.');
+  </script>
+</body>
+</html>
