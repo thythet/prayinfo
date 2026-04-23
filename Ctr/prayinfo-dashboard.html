@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PrayInfo Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root{
+      --bg1:#0a1220; --bg2:#101b31; --glass:rgba(255,255,255,.08); --stroke:rgba(255,255,255,.12);
+      --text:#f5f7fb; --muted:#b9c2d2; --blue:#5da7ff; --blue2:#7a79ff; --danger:#ff8a8a; --success:#78d69a;
+      --shadow:0 18px 46px rgba(0,0,0,.28); --card:rgba(255,255,255,.06);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; min-height:100vh; color:var(--text); font-family:"Kantumruy Pro",sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(93,167,255,.16), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(113,82,255,.12), transparent 28%),
+        linear-gradient(160deg,var(--bg1),var(--bg2));
+    }
+    button,input{font:inherit}
+    .hidden{display:none !important}
+    .glass{
+      background:var(--glass); border:1px solid var(--stroke); box-shadow:var(--shadow);
+      backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    }
+    .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+    .login-card{width:min(460px,100%);border-radius:28px;padding:28px}
+    .brand{display:flex;align-items:center;gap:12px;margin-bottom:18px;font-weight:700;font-size:24px}
+    .brand-icon{width:54px;height:54px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(93,167,255,.35),rgba(255,255,255,.06));border:1px solid rgba(255,255,255,.12);font-size:24px}
+    .sub{color:var(--muted);line-height:1.7;margin:0 0 18px;font-size:14px}
+    .field{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+    .field label{font-size:13px;color:#dbe5f2;font-weight:600}
+    .input-dark{width:100%;border:1px solid rgba(255,255,255,.12);border-radius:18px;background:rgba(255,255,255,.06);color:#fff;padding:14px 16px;outline:none}
+    .btn-row{display:flex;gap:10px;flex-wrap:wrap}
+    .btn{border:none;border-radius:16px;padding:13px 18px;cursor:pointer;color:#fff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);transition:.2s ease}
+    .btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.13)}
+    .btn.primary{background:linear-gradient(135deg,var(--blue),var(--blue2))}
+    .status{margin-top:14px;color:var(--muted);min-height:20px;font-size:13px}
+
+    .app-shell{max-width:1500px;margin:0 auto;padding:20px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px;padding:16px 18px;border-radius:24px}
+    .topbar h1{margin:0;font-size:28px;line-height:1.3}
+    .topbar p{margin:4px 0 0;color:var(--muted);font-size:14px}
+    .top-actions{display:flex;gap:10px;flex-wrap:wrap}
+    .tag{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10);font-size:12px;color:#dbe9ff;font-weight:600}
+
+    .stats-grid{
+      display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; margin-bottom:18px;
+    }
+    .stat-card{padding:18px;border-radius:24px;background:var(--card);border:1px solid rgba(255,255,255,.1)}
+    .stat-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .stat-label{font-size:13px;color:var(--muted)}
+    .stat-icon{font-size:24px;color:#d8ebff}
+    .stat-value{font-size:34px;font-weight:700;line-height:1.1}
+    .stat-sub{font-size:12px;color:var(--muted);margin-top:6px}
+
+    .layout{
+      display:grid; grid-template-columns:1.2fr .8fr; gap:18px;
+    }
+    .col{display:flex;flex-direction:column;gap:18px}
+    .panel{border-radius:26px;overflow:hidden}
+    .panel-header{padding:18px 18px 12px;border-bottom:1px solid rgba(255,255,255,.08)}
+    .panel-title{font-size:20px;font-weight:700;margin:0}
+    .panel-sub{font-size:13px;color:var(--muted);margin-top:4px}
+    .panel-body{padding:16px}
+    .chart-wrap{height:320px}
+    .chart-wrap.small{height:280px}
+    .list{display:flex;flex-direction:column;gap:10px;max-height:420px;overflow:auto;padding-right:4px}
+    .log-card{padding:14px 15px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+    .log-title{font-size:15px;font-weight:700}
+    .log-meta{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.6}
+    .badge{
+      display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;
+      background:rgba(255,255,255,.08);font-size:11px;font-weight:700;border:1px solid rgba(255,255,255,.12)
+    }
+    .badge.create{color:#a8ffd1}
+    .badge.update{color:#cbe2ff}
+    .badge.delete{color:#ffc0c0}
+    .badge.restore{color:#ffe4a8}
+    .table{width:100%;border-collapse:collapse}
+    .table th,.table td{padding:10px 8px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left;font-size:13px}
+    .table th{color:#d6e7ff;font-weight:700}
+    .table td{color:var(--text)}
+    .muted{color:var(--muted)}
+    .empty{color:var(--muted);padding:8px 0}
+    @media (max-width:1100px){
+      .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .layout{grid-template-columns:1fr}
+    }
+    @media (max-width:760px){
+      .app-shell{padding:12px}
+      .topbar{padding:14px}
+      .topbar h1{font-size:22px}
+      .stats-grid{grid-template-columns:1fr}
+      .stat-value{font-size:28px}
+      .chart-wrap{height:260px}
+    }
+  </style>
+</head>
+<body>
+  <div id="loginScreen" class="login-wrap">
+    <div class="login-card glass">
+      <div class="brand">
+        <div class="brand-icon"><i class="ri-bar-chart-box-line"></i></div>
+        <div>PrayInfo Dashboard</div>
+      </div>
+      <p class="sub">Admin-only analytics dashboard for entries, field areas, users, and activity logs.</p>
+      <div class="field">
+        <label for="loginEmail">Email</label>
+        <input id="loginEmail" class="input-dark" type="email" placeholder="you@example.com">
+      </div>
+      <div class="field">
+        <label for="loginPassword">Password</label>
+        <input id="loginPassword" class="input-dark" type="password" placeholder="••••••••">
+      </div>
+      <div class="btn-row">
+        <button id="loginBtn" class="btn primary" type="button"><i class="ri-login-box-line"></i> Login</button>
+      </div>
+      <div id="loginStatus" class="status"></div>
+    </div>
+  </div>
+
+  <div id="appScreen" class="app-shell hidden">
+    <div class="topbar glass">
+      <div>
+        <h1>PrayInfo Dashboard</h1>
+        <p id="userLabel">Signed in</p>
+      </div>
+      <div class="top-actions">
+        <span class="tag"><i class="ri-shield-star-line"></i> admin only</span>
+        <button id="logoutBtn" class="btn" type="button"><i class="ri-logout-box-r-line"></i> Logout</button>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card glass">
+        <div class="stat-head"><div class="stat-label">Total Entries</div><div class="stat-icon"><i class="ri-file-list-3-line"></i></div></div>
+        <div id="statEntries" class="stat-value">0</div>
+        <div class="stat-sub">Current prayinfo forms</div>
+      </div>
+      <div class="stat-card glass">
+        <div class="stat-head"><div class="stat-label">Field Areas</div><div class="stat-icon"><i class="ri-map-pin-line"></i></div></div>
+        <div id="statAreas" class="stat-value">0</div>
+        <div class="stat-sub">Master data groups</div>
+      </div>
+      <div class="stat-card glass">
+        <div class="stat-head"><div class="stat-label">Members</div><div class="stat-icon"><i class="ri-team-line"></i></div></div>
+        <div id="statMembers" class="stat-value">0</div>
+        <div class="stat-sub">Across all field areas</div>
+      </div>
+      <div class="stat-card glass">
+        <div class="stat-head"><div class="stat-label">Audit Logs</div><div class="stat-icon"><i class="ri-history-line"></i></div></div>
+        <div id="statLogs" class="stat-value">0</div>
+        <div class="stat-sub">Tracked actions</div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div class="col">
+        <div class="panel glass">
+          <div class="panel-header">
+            <h3 class="panel-title">Entries by Date</h3>
+            <div class="panel-sub">Last 14 saved entry days</div>
+          </div>
+          <div class="panel-body">
+            <div class="chart-wrap"><canvas id="entriesChart"></canvas></div>
+          </div>
+        </div>
+
+        <div class="panel glass">
+          <div class="panel-header">
+            <h3 class="panel-title">Field Areas by Entry Count</h3>
+            <div class="panel-sub">Most used field areas in prayinfo entries</div>
+          </div>
+          <div class="panel-body">
+            <div class="chart-wrap small"><canvas id="areasChart"></canvas></div>
+          </div>
+        </div>
+
+        <div class="panel glass">
+          <div class="panel-header">
+            <h3 class="panel-title">Most Active Users</h3>
+            <div class="panel-sub">From audit logs</div>
+          </div>
+          <div class="panel-body">
+            <table class="table">
+              <thead>
+                <tr><th>User</th><th>Role</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="userActivityBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="panel glass">
+          <div class="panel-header">
+            <h3 class="panel-title">Recent Activity</h3>
+            <div class="panel-sub">Latest 20 audit logs</div>
+          </div>
+          <div class="panel-body">
+            <div id="activityList" class="list"></div>
+          </div>
+        </div>
+
+        <div class="panel glass">
+          <div class="panel-header">
+            <h3 class="panel-title">Action Breakdown</h3>
+            <div class="panel-sub">Create, update, delete, restore</div>
+          </div>
+          <div class="panel-body">
+            <div class="chart-wrap small"><canvas id="actionsChart"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="appStatus" class="status"></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+    import { getDatabase, ref, onValue, get } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCnY3d8RMsKDKcBVZQso-sI67Kh5jNiQMM",
+      authDomain: "thythet-prayinfo.firebaseapp.com",
+      databaseURL: "https://thythet-prayinfo-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "thythet-prayinfo",
+      storageBucket: "thythet-prayinfo.firebasestorage.app",
+      messagingSenderId: "118558680253",
+      appId: "1:118558680253:web:1a15f0dbfdf293e7c5c3d4"
+    };
+
+    const ADMIN_UID = "tbZLZ0VJE2PHk3XS2QWwzqRLitd2";
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+
+    const loginScreen = document.getElementById("loginScreen");
+    const appScreen = document.getElementById("appScreen");
+    const loginEmail = document.getElementById("loginEmail");
+    const loginPassword = document.getElementById("loginPassword");
+    const loginBtn = document.getElementById("loginBtn");
+    const loginStatus = document.getElementById("loginStatus");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const userLabel = document.getElementById("userLabel");
+    const appStatus = document.getElementById("appStatus");
+
+    const statEntries = document.getElementById("statEntries");
+    const statAreas = document.getElementById("statAreas");
+    const statMembers = document.getElementById("statMembers");
+    const statLogs = document.getElementById("statLogs");
+    const activityList = document.getElementById("activityList");
+    const userActivityBody = document.getElementById("userActivityBody");
+
+    let fieldAreas = {};
+    let prayinfoEntries = {};
+    let auditLogs = {};
+    let entriesChart = null;
+    let areasChart = null;
+    let actionsChart = null;
+
+    function setStatus(el, text, good = false) {
+      el.textContent = text || "";
+      el.style.color = good ? "var(--success)" : "var(--muted)";
+    }
+
+    async function getUserRole(user) {
+      if (!user) return null;
+      if (user.uid === ADMIN_UID) return "admin";
+      const snap = await get(ref(db, `allowedUsers/${user.uid}/role`));
+      return snap.exists() ? snap.val() : "viewer";
+    }
+
+    function formatDate(ts) {
+      if (!ts) return "-";
+      return new Date(ts).toLocaleString();
+    }
+
+    function updateStats() {
+      const areaCount = Object.keys(fieldAreas).length;
+      const entryCount = Object.keys(prayinfoEntries).length;
+      const logCount = Object.keys(auditLogs).length;
+      const memberCount = Object.values(fieldAreas).reduce((sum, area) => sum + Object.keys(area.members || {}).length, 0);
+
+      statEntries.textContent = entryCount;
+      statAreas.textContent = areaCount;
+      statMembers.textContent = memberCount;
+      statLogs.textContent = logCount;
+    }
+
+    function buildEntriesByDate() {
+      const counts = {};
+      Object.values(prayinfoEntries).forEach(entry => {
+        const key = entry.currentDate || (entry.createdAt ? new Date(entry.createdAt).toISOString().slice(0,10) : "unknown");
+        counts[key] = (counts[key] || 0) + 1;
+      });
+      const sorted = Object.entries(counts).sort((a,b) => a[0].localeCompare(b[0])).slice(-14);
+      return { labels: sorted.map(x => x[0]), values: sorted.map(x => x[1]) };
+    }
+
+    function buildAreasByEntryCount() {
+      const counts = {};
+      Object.values(prayinfoEntries).forEach(entry => {
+        const key = entry.fieldArea || "Unknown";
+        counts[key] = (counts[key] || 0) + 1;
+      });
+      const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]).slice(0,8);
+      return { labels: sorted.map(x => x[0]), values: sorted.map(x => x[1]) };
+    }
+
+    function buildActionBreakdown() {
+      const counts = { create:0, update:0, delete:0, restore:0 };
+      Object.values(auditLogs).forEach(log => {
+        const action = (log.action || "").toLowerCase();
+        if (counts[action] !== undefined) counts[action] += 1;
+      });
+      return counts;
+    }
+
+    function renderActivityList() {
+      const items = Object.values(auditLogs).sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0)).slice(0,20);
+      activityList.innerHTML = "";
+      if (!items.length) {
+        activityList.innerHTML = '<div class="empty">No activity yet.</div>';
+        return;
+      }
+      items.forEach(log => {
+        const el = document.createElement("div");
+        el.className = "log-card";
+        const action = (log.action || "unknown").toLowerCase();
+        el.innerHTML = `
+          <div class="log-title">
+            <span class="badge ${action}">${action.toUpperCase()}</span>
+            ${log.fieldArea || "-"}
+          </div>
+          <div class="log-meta">
+            ${log.user?.email || "-"} • ${log.user?.role || "-"}<br>
+            ${formatDate(log.timestamp)}
+          </div>
+        `;
+        activityList.appendChild(el);
+      });
+    }
+
+    function renderUserActivity() {
+      const map = {};
+      Object.values(auditLogs).forEach(log => {
+        const key = log.user?.email || "Unknown";
+        if (!map[key]) map[key] = { role: log.user?.role || "-", count: 0 };
+        map[key].count += 1;
+        map[key].role = log.user?.role || map[key].role;
+      });
+      const rows = Object.entries(map).sort((a,b) => b[1].count - a[1].count).slice(0,10);
+      userActivityBody.innerHTML = "";
+      if (!rows.length) {
+        userActivityBody.innerHTML = '<tr><td colspan="3" class="muted">No activity yet.</td></tr>';
+        return;
+      }
+      rows.forEach(([email, data]) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${email}</td><td>${data.role}</td><td>${data.count}</td>`;
+        userActivityBody.appendChild(tr);
+      });
+    }
+
+    function destroyChart(instance) {
+      if (instance) instance.destroy();
+      return null;
+    }
+
+    function renderCharts() {
+      const entries = buildEntriesByDate();
+      const areaUsage = buildAreasByEntryCount();
+      const actions = buildActionBreakdown();
+
+      entriesChart = destroyChart(entriesChart);
+      areasChart = destroyChart(areasChart);
+      actionsChart = destroyChart(actionsChart);
+
+      entriesChart = new Chart(document.getElementById("entriesChart"), {
+        type: "line",
+        data: {
+          labels: entries.labels,
+          datasets: [{
+            label: "Entries",
+            data: entries.values,
+            borderWidth: 2,
+            tension: 0.35,
+            fill: false
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: "#d8ebff" } } },
+          scales: {
+            x: { ticks: { color: "#c8d7ea" }, grid: { color: "rgba(255,255,255,.08)" } },
+            y: { ticks: { color: "#c8d7ea", precision: 0 }, grid: { color: "rgba(255,255,255,.08)" } }
+          }
+        }
+      });
+
+      areasChart = new Chart(document.getElementById("areasChart"), {
+        type: "bar",
+        data: {
+          labels: areaUsage.labels,
+          datasets: [{
+            label: "Entries",
+            data: areaUsage.values,
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: "#d8ebff" } } },
+          scales: {
+            x: { ticks: { color: "#c8d7ea" }, grid: { color: "rgba(255,255,255,.06)" } },
+            y: { ticks: { color: "#c8d7ea", precision: 0 }, grid: { color: "rgba(255,255,255,.06)" } }
+          }
+        }
+      });
+
+      actionsChart = new Chart(document.getElementById("actionsChart"), {
+        type: "doughnut",
+        data: {
+          labels: ["Create", "Update", "Delete", "Restore"],
+          datasets: [{
+            data: [actions.create, actions.update, actions.delete, actions.restore],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: "#d8ebff" } } }
+        }
+      });
+    }
+
+    function refreshDashboard() {
+      updateStats();
+      renderActivityList();
+      renderUserActivity();
+      renderCharts();
+    }
+
+    function subscribeAll() {
+      onValue(ref(db, "fieldAreas"), snap => {
+        fieldAreas = snap.val() || {};
+        refreshDashboard();
+      });
+      onValue(ref(db, "prayinfoEntries"), snap => {
+        prayinfoEntries = snap.val() || {};
+        refreshDashboard();
+      });
+      onValue(ref(db, "auditLogs"), snap => {
+        auditLogs = snap.val() || {};
+        refreshDashboard();
+      });
+    }
+
+    loginBtn.addEventListener("click", async () => {
+      try {
+        setStatus(loginStatus, "Logging in...");
+        await signInWithEmailAndPassword(auth, loginEmail.value.trim(), loginPassword.value);
+      } catch (err) {
+        setStatus(loginStatus, err.message || "Login failed.");
+      }
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        loginScreen.classList.remove("hidden");
+        appScreen.classList.add("hidden");
+        return;
+      }
+
+      const role = await getUserRole(user);
+      if (role !== "admin") {
+        alert("Access denied. Admin only.");
+        await signOut(auth);
+        setStatus(loginStatus, "Admin only.");
+        return;
+      }
+
+      loginScreen.classList.add("hidden");
+      appScreen.classList.remove("hidden");
+      userLabel.textContent = `${user.email} • admin`;
+      subscribeAll();
+      setStatus(appStatus, "Dashboard loaded.", true);
+    });
+  </script>
+</body>
+</html>
