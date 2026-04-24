@@ -1,0 +1,945 @@
+<!DOCTYPE html><html lang="km"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>PrayInfo Exact Form SPA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet"><script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{--bg1:#0a1220;--bg2:#101b31;--glass:rgba(255,255,255,.08);--stroke:rgba(255,255,255,.12);--text:#f5f7fb;--app-muted:#b9c2d2;--blue:#5da7ff;--blue2:#7a79ff;--danger:#ff8a8a;--success:#78d69a;--shadow:0 18px 46px rgba(0,0,0,.28)}*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:"Kantumruy Pro",sans-serif;color:var(--text);background:radial-gradient(circle at top left,rgba(93,167,255,.16),transparent 30%),radial-gradient(circle at bottom right,rgba(113,82,255,.12),transparent 28%),linear-gradient(160deg,var(--bg1),var(--bg2))}button,input,textarea,select{font-family:"Kantumruy Pro",sans-serif}.hidden{display:none!important}.glass{background:var(--glass);border:1px solid var(--stroke);box-shadow:var(--shadow);backdrop-filter:blur(14px)}.loader{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#0a1220,#101b31);transition:.3s}.loader.hidden{opacity:0;visibility:hidden}.loader-card{width:min(320px,90vw);padding:26px;border-radius:24px;text-align:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);box-shadow:var(--shadow)}.login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}.login-card{width:min(460px,100%);border-radius:28px;padding:28px}.brand{display:flex;gap:12px;align-items:center;font-size:24px;font-weight:700;margin-bottom:18px}.brand i{width:54px;height:54px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(93,167,255,.35),rgba(255,255,255,.06))}.sub{color:var(--app-muted);line-height:1.7}.field{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}.input{width:100%;border:1px solid rgba(255,255,255,.12);border-radius:18px;background:rgba(255,255,255,.06);color:#fff;padding:14px 16px;outline:none}.btn{border:0;border-radius:16px;padding:12px 16px;cursor:pointer;color:#fff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}.btn.primary{background:linear-gradient(135deg,var(--blue),var(--blue2))}.btn.danger{background:rgba(255,125,125,.12);color:#ffd3d3}.btn.small{padding:7px 10px;border-radius:12px;font-size:13px}.row{display:flex;gap:10px;flex-wrap:wrap}.status{margin-top:12px;color:var(--app-muted);font-size:13px}.app{max-width:1500px;margin:auto;padding:16px}.nav{position:sticky;top:0;z-index:99;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 16px;border-radius:22px;margin-bottom:16px}.nav-left{font-weight:700;font-size:18px}.nav-center{display:flex;gap:8px;flex-wrap:wrap}.nav-link{background:transparent;color:#dbe5f2;padding:8px 12px;border-radius:12px}.nav-link.active{background:linear-gradient(135deg,#5da7ff,#7a79ff)}.nav-right{display:flex;align-items:center;gap:10px;color:var(--app-muted);font-size:13px}.grid{display:grid;grid-template-columns:360px 1fr;gap:18px}.panel{border-radius:26px;overflow:hidden}.ph{padding:18px;border-bottom:1px solid rgba(255,255,255,.08)}.ph h3{margin:0}.pb,.work{padding:16px}.search{position:relative;margin-bottom:14px}.search i{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:#bfdcff}.search .input{padding-left:42px}.list{display:flex;flex-direction:column;gap:10px;max-height:calc(100vh - 260px);overflow:auto}.card{padding:14px 15px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}.click{cursor:pointer}.click:hover,.active-card{background:rgba(93,167,255,.16);border-color:rgba(143,197,255,.28)}.card-title{font-weight:700}.meta{font-size:12px;color:var(--app-muted);margin-top:4px}.top-toolbar{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}.shell{background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.12);border-radius:26px;padding:20px}.empty{min-height:280px;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--app-muted)}.form-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}.manager-card{width:min(100%,980px);margin:auto;background:#fff;color:#111;padding:22px;border-radius:24px}.manager-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.light{width:100%;border:1px solid #d6dde8;border-radius:14px;background:#fff;color:#111;padding:12px 14px}.member-row{display:flex;gap:10px;margin-bottom:10px}.member-row input{flex:1}.json{background:#0f1724;color:#cfe1ff;border-radius:18px;padding:14px;font-family:monospace;font-size:12px;max-height:260px;overflow:auto}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:18px}.stat{padding:18px;border-radius:24px}.stat-v{font-size:34px;font-weight:700}.chart{height:300px}
+
+    :root {
+      --paper: #ffffff;
+      --page-bg: #eceff3;
+      --ink: #111111;
+      --line: #1c1c1c;
+      --muted: #5f6772;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    .paper-scope { color: var(--ink); font-family: "Kantumruy Pro", sans-serif; }
+
+    .toolbar {
+      width: min(100%, 900px);
+      margin: 0 auto 14px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .toolbar button {
+      border: 1px solid #cfd6de;
+      background: #ffffff;
+      color: #12202d;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .page {
+      width: min(100%, 900px);
+      margin: 0 auto;
+      background: var(--paper);
+      padding: 24px 28px 32px;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    .title {
+      margin: 0 0 10px;
+      text-align: center;
+      font-size: 27px;
+      font-weight: 700;
+    }
+
+    .subhead {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      align-items: end;
+      gap: 16px;
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+
+    .subhead .center {
+      text-align: center;
+      justify-self: center;
+    }
+
+    .subhead .right {
+      text-align: right;
+      justify-self: stretch;
+      padding-right: 18px;
+      box-sizing: border-box;
+    }
+
+    .subhead .right .inline-field {
+      width: 100%;
+      justify-content: flex-end;
+    }
+
+    .inline-field {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 8px;
+      min-width: 0;
+      white-space: nowrap;
+    }
+
+    .line-input {
+      min-width: 130px;
+      width: 130px;
+      border: 0;
+      border-bottom: 1px solid transparent;
+      background: transparent;
+      font: inherit;
+      padding: 2px 0;
+      outline: none;
+    }
+
+    .field-area-picker {
+      position: relative;
+      display: inline-block;
+      min-width: 0;
+    }
+
+    .field-area-toggle {
+      width: auto;
+      min-height: 28px;
+      padding: 0 50px 0 0;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      font-weight: 700;
+      line-height: 1.4;
+      text-align: left;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .field-area-toggle i {
+      position: absolute;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-48%);
+      font-size: 20px;
+      line-height: 1;
+      color: #111111;
+      pointer-events: none;
+    }
+
+    .field-area-toggle:focus {
+      outline: none;
+    }
+
+    .field-area-panel {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      width: 360px;
+      min-width: 100%;
+      max-height: 320px;
+      display: none;
+      border: 1px solid #cfd6de;
+      border-radius: 12px;
+      background: #ffffff;
+      box-shadow: 0 18px 40px rgba(16, 25, 37, 0.16);
+      overflow: hidden;
+      z-index: 50;
+    }
+
+    .field-area-picker.open .field-area-panel {
+      display: block;
+    }
+
+    .field-area-search {
+      width: calc(100% - 20px);
+      margin: 10px;
+      padding: 8px 10px;
+      border: 1px solid #cfd6de;
+      border-radius: 8px;
+      font: inherit;
+      outline: none;
+    }
+
+    .field-area-search:focus {
+      border-color: #7aa2d6;
+      box-shadow: 0 0 0 3px rgba(122, 162, 214, 0.18);
+    }
+
+    .field-area-list {
+      max-height: 250px;
+      overflow: auto;
+      padding: 0 0 8px;
+      overflow-x: hidden;
+    }
+
+    .field-area-group {
+      padding: 8px 12px 4px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #5f6772;
+      background: #f8fafc;
+      border-top: 1px solid rgba(207, 214, 222, 0.5);
+    }
+
+    .field-area-option {
+      display: block;
+      width: 100%;
+      padding: 7px 12px;
+      border: 0;
+      background: transparent;
+      text-align: left;
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+      white-space: normal;
+      word-break: break-word;
+    }
+
+    .field-area-option:hover,
+    .field-area-option:focus {
+      background: #eef5ff;
+      outline: none;
+    }
+
+    .field-area-empty {
+      padding: 10px 12px;
+      color: #7b8794;
+      font-size: 14px;
+    }
+
+    .date-field {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    #currentDate {
+      min-width: 170px;
+      width: 170px;
+      text-align: left;
+      padding-right: 40px;
+    }
+
+    #currentDate::-webkit-calendar-picker-indicator {
+      cursor: pointer;
+      margin-left: 8px;
+    }
+
+    .line-input:focus {
+      border-bottom-color: #95a0ae;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      border: 1px solid var(--line);
+    }
+
+    td,
+    th {
+      border: 1px solid var(--line);
+      padding: 0;
+      vertical-align: middle;
+    }
+
+    .label-cell {
+      width: 150px;
+      padding: 8px 10px;
+      font-size: 18px;
+      font-weight: 700;
+      vertical-align: top;
+    }
+
+    .participant-count {
+      color: #2e5fbf;
+      font-weight: 700;
+    }
+
+    .number-col {
+      width: 66px;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    .name-col {
+      width: 250px;
+    }
+
+    .field-cell {
+      min-height: 52px;
+      height: auto;
+    }
+
+    .field-cell input,
+    .field-cell textarea {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      font: inherit;
+      color: inherit;
+      outline: none;
+      padding: 10px 12px;
+      box-sizing: border-box;
+    }
+
+    .field-cell input {
+      height: 100%;
+    }
+
+    .field-cell textarea {
+      display: block;
+      height: 52px;
+      min-height: 52px;
+      resize: none;
+      overflow: hidden;
+      line-height: 1.25;
+      white-space: pre-wrap;
+    }
+
+    .name-display {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 10px 12px;
+      font: inherit;
+      color: inherit;
+    }
+
+    .participant-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 12px;
+      flex-wrap: wrap;
+    }
+
+    .participant-wrap span {
+      font-size: 18px;
+      white-space: nowrap;
+      padding-top: 6px;
+    }
+
+    .participant-controls {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .select-with-add {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: nowrap;
+    }
+
+    .select-with-add .selected-participant {
+      flex: 1;
+      min-width: 0;
+      padding: 0;
+    }
+
+    .select-with-add select {
+      width: 116px;
+      flex: 0 0 116px;
+    }
+
+    .participant-select-wrap {
+      position: relative;
+      width: 116px;
+      flex: 0 0 116px;
+    }
+
+    .participant-select-wrap i {
+      position: absolute;
+      top: 50%;
+      right: 8px;
+      transform: translateY(-48%);
+      font-size: 20px;
+      line-height: 1;
+      color: #334155;
+      pointer-events: none;
+    }
+
+    #participantSelect {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      height: 34px;
+      width: 100%;
+      padding: 6px 28px 6px 10px;
+      border: 1px solid #cfd6de;
+      border-radius: 8px;
+      background-color: #ffffff;
+      background-image: linear-gradient(to right, #d8e0e8, #d8e0e8);
+      background-position: calc(100% - 28px) 6px;
+      background-size: 1px 20px;
+      background-repeat: no-repeat;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      font-size: 15px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    }
+
+    #participantSelect:hover {
+      border-color: #b7c4d1;
+      background-color: #fbfdff;
+    }
+
+    #participantSelect:focus {
+      border-color: #7aa2d6;
+      box-shadow: 0 0 0 3px rgba(122, 162, 214, 0.18);
+    }
+
+    #participantSelect.is-hidden {
+      display: none;
+    }
+
+    .add-btn {
+      border: 1px solid #cfd6de;
+      background: #ffffff;
+      color: #183042;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font: inherit;
+      font-size: 15px;
+      line-height: 1;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .add-btn:hover {
+      background: #f4f7fa;
+    }
+
+    .selected-participant {
+      min-height: 32px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 16px;
+      color: #183042;
+      white-space: normal;
+      word-break: break-word;
+    }
+
+    .selected-participant.empty {
+      color: var(--muted);
+    }
+
+    .participant-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 5px 12px;
+      border: 1px solid #cfd6de;
+      border-radius: 999px;
+      background: #f8fafc;
+      color: #183042;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .single-line {
+      height: 52px;
+    }
+
+    .prayer-cell {
+      padding: 0;
+    }
+
+    .inner-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      border: 0;
+    }
+
+    .inner-table th,
+    .inner-table td {
+      border: 1px solid var(--line);
+      padding: 0;
+      vertical-align: middle;
+    }
+
+    .inner-table tr:first-child th {
+      border-top: 0;
+    }
+
+    .inner-table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .inner-table th:first-child,
+    .inner-table td:first-child,
+    .inner-table th:last-child,
+    .inner-table td:last-child {
+      border-left-width: 1px;
+      border-right-width: 1px;
+    }
+
+    .prayer-header th {
+      height: 44px;
+      font-size: 18px;
+      font-weight: 700;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    .prayer-header .number-col {
+      width: 66px;
+    }
+
+    .prayer-header .name-col {
+      width: 250px;
+    }
+
+    .prayer-row td {
+      height: 48px;
+    }
+
+    .print-page-number {
+      display: none;
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 8mm 10mm 14mm;
+    }
+
+    @media print {
+      html,
+      body {
+        counter-reset: page 1;
+      }
+
+      body {
+        padding: 0;
+        background: #ffffff;
+        font-size: 14px;
+      }
+
+      .toolbar {
+        display: none;
+      }
+
+      .page {
+        width: 100%;
+        max-width: none;
+        padding: 0;
+        box-shadow: none;
+        margin: 0;
+      }
+
+      .title {
+        font-size: 24px;
+        margin-bottom: 8px;
+      }
+
+      .subhead {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 12px;
+        font-size: 16px;
+        margin-bottom: 8px;
+      }
+
+      .inline-field {
+        white-space: nowrap;
+      }
+
+      .label-cell,
+      .prayer-header th,
+      .number-col,
+      .participant-wrap span {
+        font-size: 16px;
+      }
+
+      .field-cell,
+      .prayer-row td,
+      .single-line,
+      .field-cell textarea {
+        min-height: 44px;
+      }
+
+      #participantSelect,
+      #addParticipantBtn {
+        display: none !important;
+      }
+
+      .participant-select-wrap i,
+      #selectedParticipant.empty {
+        display: none !important;
+      }
+
+      .field-area-toggle i {
+        display: none !important;
+      }
+
+      #fieldAreaPanel {
+        display: none !important;
+      }
+
+      .print-page-number {
+        display: block;
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 2mm;
+        text-align: center;
+        font-size: 11px;
+      }
+
+      .print-page-number::after {
+        content: "ទំព័រ " counter(page, decimal-leading-zero);
+      }
+    }
+
+    @media screen and (max-width: 760px) {
+
+      .page {
+        padding: 18px 14px 20px;
+      }
+
+      .subhead {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        font-size: 16px;
+      }
+
+      .subhead .center,
+      .subhead .right {
+        text-align: left;
+        justify-self: start;
+      }
+
+      .label-cell,
+      .number-col,
+      .section-head td,
+      .participant-wrap span {
+        font-size: 16px;
+      }
+
+      .name-col {
+        width: 160px;
+      }
+
+      .line-input {
+        min-width: 100px;
+      }
+    }
+  
+@media(max-width:1100px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}}@media(max-width:760px){.app{padding:10px}.nav{flex-direction:column;align-items:flex-start}.manager-grid,.stats{grid-template-columns:1fr}.paper-scope.page{width:900px;max-width:none}.shell{padding:12px}}@media print{body{background:#fff}.app,.login,.loader{display:none!important}.print{display:block!important}.print .page{box-shadow:none!important;width:100%!important;max-width:none!important;padding:0!important;margin:0!important}}.print{display:none}</style></head><body>
+<div id="loader" class="loader"><div class="loader-card"><b>Loading PrayInfo...</b></div></div>
+<div id="login" class="login hidden"><div class="login-card glass"><div class="brand"><i class="ri-lock-line"></i><span>PrayInfo</span></div><p class="sub">Email/Password private system.</p><div class="field"><label>Email</label><input id="email" class="input" type="email"></div><div class="field"><label>Password</label><input id="pass" class="input" type="password"></div><button id="loginBtn" class="btn primary">Login</button><div id="loginStatus" class="status"></div></div></div>
+<div id="app" class="app hidden"><div class="nav glass"><div class="nav-left"><i class="ri-stack-line"></i> PrayInfo</div><div class="nav-center"><button class="btn nav-link active" data-page="form">Form</button><button id="navManager" class="btn nav-link hidden" data-page="manager">Manager</button><button id="navDash" class="btn nav-link hidden" data-page="dash">Dashboard</button></div><div class="nav-right"><span id="userInfo"></span><button id="logout" class="btn small">Logout</button></div></div>
+<section id="pageForm"><div class="grid"><div class="panel glass"><div class="ph"><h3>Saved Entries</h3><div class="meta">Click to open</div></div><div class="pb"><div class="search"><i class="ri-search-eye-line"></i><input id="entrySearch" class="input" placeholder="Search..."></div><div id="entryList" class="list"></div></div></div><div class="panel glass"><div class="work"><div class="top-toolbar"><span id="access" class="meta"></span><div class="row"><button id="newEntry" class="btn primary hidden">New</button><button id="saveEntry" class="btn primary hidden">Save</button><button id="deleteEntry" class="btn danger hidden">Delete</button><button id="exportPdf" class="btn">Export PDF</button></div></div><div id="formEmpty" class="empty">Select entry or create new form.</div><div id="formShell" class="shell hidden"><div class="form-scroll">
+  <main class="page paper-scope" id="paperForm">
+    <h1 class="title">ពួកជំនុំតាមផ្ទះ</h1>
+
+    <section class="subhead">
+      <div class="left">
+        <label class="inline-field">
+          <span>វាលស្មៅ៖</span>
+          <div class="field-area-picker" id="fieldAreaPicker">
+            <button type="button" class="field-area-toggle" id="fieldAreaToggle" aria-haspopup="listbox" aria-expanded="false">
+              <span id="fieldAreaValue">វៀតណាម</span>
+              <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+            </button>
+            <div class="field-area-panel" id="fieldAreaPanel">
+              <input type="text" class="field-area-search" id="fieldAreaSearch" placeholder="ស្វែងរក..." aria-label="Search field area" autocomplete="off">
+              <div class="field-area-list" id="fieldAreaList" role="listbox" aria-label="Field area options"></div>
+            </div>
+          </div>
+        </label>
+      </div>
+      <div class="center">
+        <label class="inline-field">
+          <span>អ្នកគង្វាល៖</span>
+          <input class="line-input" id="pastorName" type="text" placeholder="បញ្ចូលឈ្មោះ">
+        </label>
+      </div>
+      <div class="right">
+        <label class="inline-field">
+          <span>កាលបរិច្ឆេទ៖</span>
+          <span class="date-field">
+            <input class="line-input" id="currentDate" type="date">
+          </span>
+        </label>
+      </div>
+    </section>
+
+    <table aria-label="House church prayer form">
+      <colgroup>
+        <col style="width: 150px">
+        <col>
+      </colgroup>
+
+      <tr>
+        <td class="label-cell">អ្នកចូលរួម <span class="participant-count" id="participantCount">(0នាក់)</span></td>
+        <td class="field-cell">
+          <div class="participant-wrap">
+            <span>ឈ្មោះ៖</span>
+            <div class="participant-controls">
+              <div class="select-with-add">
+                <div class="selected-participant empty" id="selectedParticipant" aria-live="polite">សូមជ្រើសឈ្មោះពីបញ្ជី</div>
+                <div class="participant-select-wrap">
+                  <select id="participantSelect" aria-label="Participant name"></select>
+                  <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+                </div>
+                <button type="button" class="add-btn" id="addParticipantBtn">+ Add</button>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="prayer-cell" colspan="2">
+          <table class="inner-table" aria-label="Prayer request rows">
+            <colgroup>
+              <col style="width: 66px">
+              <col style="width: 250px">
+              <col>
+            </colgroup>
+            <thead>
+              <tr class="prayer-header">
+                <th class="number-col">លេខ</th>
+                <th class="name-col">ឈ្មោះ</th>
+                <th>សំណូមពរ</th>
+              </tr>
+            </thead>
+            <tbody id="prayerRows"></tbody>
+          </table>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label-cell">រឿងពិសេស</td>
+        <td class="field-cell single-line">
+          <textarea id="specialNote" aria-label="Special note"></textarea>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label-cell">ដង្វាយ</td>
+        <td class="field-cell single-line">
+          <textarea id="offering" aria-label="Offering"></textarea>
+        </td>
+      </tr>
+    </table>
+  </main>
+
+  <div class="print-page-number" aria-hidden="true"></div>
+
+  </div></div><div id="formStatus" class="status"></div></div></div></div></section>
+<section id="pageManager" class="hidden"><div class="grid"><div class="panel glass"><div class="ph"><h3>Field Areas</h3><div class="meta">Admin only</div></div><div class="pb"><div class="search"><i class="ri-search-eye-line"></i><input id="areaSearch" class="input" placeholder="Search..."></div><div id="areaList" class="list"></div></div></div><div class="panel glass"><div class="work"><div class="top-toolbar"><span class="meta">Manager</span><div class="row"><button id="newArea" class="btn primary">New</button><button id="saveArea" class="btn primary">Save</button><button id="delArea" class="btn danger hidden">Delete</button></div></div><div id="managerEmpty" class="empty">Select or create field area.</div><div id="managerShell" class="shell hidden"><div class="manager-card"><h2>Field Area Master Data</h2><div class="manager-grid"><input id="areaName" class="light" placeholder="Field area"><input id="areaPastor" class="light" placeholder="Pastor"></div><h3>Members</h3><div class="row"><button id="addM" class="btn small primary">Add</button><button id="pasteM" class="btn small">Paste List</button></div><div id="memberEditor"></div><pre id="preview" class="json">{}</pre></div></div><div id="managerStatus" class="status"></div></div></div></div></section>
+<section id="pageDash" class="hidden"><div class="stats"><div class="stat glass"><div class="meta">Entries</div><div id="sEntries" class="stat-v">0</div></div><div class="stat glass"><div class="meta">Field Areas</div><div id="sAreas" class="stat-v">0</div></div><div class="stat glass"><div class="meta">Members</div><div id="sMembers" class="stat-v">0</div></div><div class="stat glass"><div class="meta">Logs</div><div id="sLogs" class="stat-v">0</div></div></div><div class="panel glass"><div class="ph"><h3>Entries by Date</h3></div><div class="pb"><div class="chart"><canvas id="entriesChart"></canvas></div></div></div></section></div><div id="printArea" class="print">
+  <main class="page paper-scope" id="paperForm">
+    <h1 class="title">ពួកជំនុំតាមផ្ទះ</h1>
+
+    <section class="subhead">
+      <div class="left">
+        <label class="inline-field">
+          <span>វាលស្មៅ៖</span>
+          <div class="field-area-picker" id="fieldAreaPicker">
+            <button type="button" class="field-area-toggle" id="fieldAreaToggle" aria-haspopup="listbox" aria-expanded="false">
+              <span id="fieldAreaValue">វៀតណាម</span>
+              <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+            </button>
+            <div class="field-area-panel" id="fieldAreaPanel">
+              <input type="text" class="field-area-search" id="fieldAreaSearch" placeholder="ស្វែងរក..." aria-label="Search field area" autocomplete="off">
+              <div class="field-area-list" id="fieldAreaList" role="listbox" aria-label="Field area options"></div>
+            </div>
+          </div>
+        </label>
+      </div>
+      <div class="center">
+        <label class="inline-field">
+          <span>អ្នកគង្វាល៖</span>
+          <input class="line-input" id="pastorName" type="text" placeholder="បញ្ចូលឈ្មោះ">
+        </label>
+      </div>
+      <div class="right">
+        <label class="inline-field">
+          <span>កាលបរិច្ឆេទ៖</span>
+          <span class="date-field">
+            <input class="line-input" id="currentDate" type="date">
+          </span>
+        </label>
+      </div>
+    </section>
+
+    <table aria-label="House church prayer form">
+      <colgroup>
+        <col style="width: 150px">
+        <col>
+      </colgroup>
+
+      <tr>
+        <td class="label-cell">អ្នកចូលរួម <span class="participant-count" id="participantCount">(0នាក់)</span></td>
+        <td class="field-cell">
+          <div class="participant-wrap">
+            <span>ឈ្មោះ៖</span>
+            <div class="participant-controls">
+              <div class="select-with-add">
+                <div class="selected-participant empty" id="selectedParticipant" aria-live="polite">សូមជ្រើសឈ្មោះពីបញ្ជី</div>
+                <div class="participant-select-wrap">
+                  <select id="participantSelect" aria-label="Participant name"></select>
+                  <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+                </div>
+                <button type="button" class="add-btn" id="addParticipantBtn">+ Add</button>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="prayer-cell" colspan="2">
+          <table class="inner-table" aria-label="Prayer request rows">
+            <colgroup>
+              <col style="width: 66px">
+              <col style="width: 250px">
+              <col>
+            </colgroup>
+            <thead>
+              <tr class="prayer-header">
+                <th class="number-col">លេខ</th>
+                <th class="name-col">ឈ្មោះ</th>
+                <th>សំណូមពរ</th>
+              </tr>
+            </thead>
+            <tbody id="prayerRows"></tbody>
+          </table>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label-cell">រឿងពិសេស</td>
+        <td class="field-cell single-line">
+          <textarea id="specialNote" aria-label="Special note"></textarea>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="label-cell">ដង្វាយ</td>
+        <td class="field-cell single-line">
+          <textarea id="offering" aria-label="Offering"></textarea>
+        </td>
+      </tr>
+    </table>
+  </main>
+
+  <div class="print-page-number" aria-hidden="true"></div>
+
+  </div>
+<script type="module" src="./prayinfo-app.js"></script>
+<script>
+  // Safety: never let loading screen stay forever
+  window.addEventListener("DOMContentLoaded", function () {
+    setTimeout(function () {
+      document.querySelectorAll("#appLoader,.app-loader,.loading,.loader").forEach(function(el){
+        el.style.display = "none";
+      });
+      document.body.classList.add("loaded");
+    }, 1200);
+  });
+</script>
+
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCnY3d8RMsKDKcBVZQso-sI67Kh5jNiQMM",
+  authDomain: "thythet-prayinfo.firebaseapp.com",
+  databaseURL: "https://thythet-prayinfo-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "thythet-prayinfo",
+  storageBucket: "thythet-prayinfo.firebasestorage.app",
+  messagingSenderId: "118558680253",
+  appId: "1:118558680253:web:1a15f0dbfdf293e7c5c3d4"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+let fieldAreasData = {};
+let selectedAreaId = "";
+
+function hideAllLoaders(){
+  document.querySelectorAll("#appLoader,.app-loader,.loading,.loader").forEach(el => el.style.display = "none");
+}
+hideAllLoaders();
+
+onValue(ref(db, "fieldAreas"), (snap) => {
+  fieldAreasData = snap.val() || {};
+  renderFieldAreaOptionsFromFirebase();
+});
+
+function renderFieldAreaOptionsFromFirebase(searchText = "") {
+  const list = document.getElementById("fieldAreaList");
+  if (!list) return;
+  list.innerHTML = "";
+
+  const q = searchText.trim().toLowerCase();
+  const items = Object.entries(fieldAreasData)
+    .filter(([id, area]) => (area.name || "").toLowerCase().includes(q));
+
+  if (!items.length) {
+    list.innerHTML = '<div class="field-area-empty">មិនមានទិន្នន័យ</div>';
+    return;
+  }
+
+  items.forEach(([id, area]) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "field-area-option";
+    btn.textContent = area.name || "No name";
+    btn.onclick = () => selectFieldArea(id);
+    list.appendChild(btn);
+  });
+}
+
+function selectFieldArea(id){
+  const area = fieldAreasData[id];
+  if (!area) return;
+
+  selectedAreaId = id;
+  const areaValue = document.getElementById("fieldAreaValue");
+  const pastor = document.getElementById("pastorName");
+  const panel = document.getElementById("fieldAreaPicker");
+
+  if (areaValue) areaValue.textContent = area.name || "";
+  if (pastor) pastor.value = area.pastorName || "";
+  if (panel) panel.classList.remove("open");
+
+  loadMembers(area);
+}
+
+function loadMembers(area){
+  const select = document.getElementById("participantSelect");
+  if (!select) return;
+
+  select.innerHTML = '<option value="">ជ្រើសរើស</option>';
+  Object.values(area.members || {}).forEach(m => {
+    const opt = document.createElement("option");
+    opt.value = m.name;
+    opt.textContent = m.name;
+    select.appendChild(opt);
+  });
+}
+
+// connect search box to Firebase list
+const fieldSearch = document.getElementById("fieldAreaSearch");
+if (fieldSearch) {
+  fieldSearch.addEventListener("input", () => {
+    renderFieldAreaOptionsFromFirebase(fieldSearch.value);
+  });
+}
+</script>
+
+</body></html>
