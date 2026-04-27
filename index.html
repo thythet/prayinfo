@@ -34,6 +34,34 @@ table{width:100%;border-collapse:collapse;table-layout:fixed;border:1px solid va
   --print-name-col-width:160px;
 }
 
+
+/* ===== TITLE RESPONSIVE CONTROL START ===== */
+
+/* Easy control variables */
+:root{
+  --title-size-desktop: 24px;
+  --title-size-mobile: 18px;
+}
+
+/* Main title style */
+.brand span{
+  font-size: var(--title-size-desktop);
+  white-space: nowrap;          /* keep in one line */
+  overflow: hidden;             /* prevent overflow */
+  text-overflow: ellipsis;      /* add ... if too long */
+  word-break: keep-all;         /* fix Khmer line break */
+}
+
+/* Mobile version */
+@media (max-width: 480px){
+  .brand span{
+    font-size: var(--title-size-mobile);
+  }
+}
+
+/* ===== TITLE RESPONSIVE CONTROL END ===== */
+  
+  
 /* Mobile paper scaling */
 .paper{
   width:900px;
